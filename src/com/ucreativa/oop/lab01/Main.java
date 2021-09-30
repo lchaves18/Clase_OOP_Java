@@ -1,4 +1,4 @@
-package com.ucreativa.oop;
+package com.ucreativa.oop.lab01;
 
 public class Main {
 
