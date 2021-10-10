@@ -1,7 +1,9 @@
 package com.ucreativa.oop.presupuesto;
 
 import com.ucreativa.oop.presupuesto.entidades.Gasto;
-import com.ucreativa.oop.presupuesto.entidades.RegistroGastos;
+import com.ucreativa.oop.presupuesto.entidades.Ingreso;
+import com.ucreativa.oop.presupuesto.entidades.Movimiento;
+import com.ucreativa.oop.presupuesto.entidades.RegistroMovimientos;
 
 import java.util.Scanner;
 
@@ -10,54 +12,61 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Sistema Registro de Gastos");
+        System.out.println("Sistema Registro de Movimientos");
         Scanner consola = new Scanner(System.in);
 
-        RegistroGastos registro = new RegistroGastos();
+        RegistroMovimientos registro = new RegistroMovimientos();
 
         boolean siga = true;
         while (siga){
 
-            System.out.println("Digite el nombre de su gasto:");
+            System.out.println("Digite el nombre de su movimiento:");
             String nombre = consola.nextLine();
 
             System.out.println("Digite la moneda:");
             String moneda = consola.nextLine();
 
-            System.out.println("Digite la categoria de su gasto:");
+            System.out.println("Digite la categoria de su movimiento:");
             String categoria = consola.nextLine();
 
-            System.out.println("Digite el monto:");
+            System.out.println("Digite el monto de su movimiento:");
             String montoStr = consola.nextLine();
             int monto = Integer.parseInt(montoStr);
 
-            Gasto nuevoGasto = new Gasto(nombre, moneda, categoria, monto);
-
-        /*intancia quemada
-        Gasto gastoLuz = new Gasto("Luz",
-                "Colones",
-                "Servicios",
-                22000);*/
-
-        /*Gasto gastoInternet = new Gasto("Internet",
-                "Colones",
-                "Servicios",
-                35000);*/
+            Movimiento nuevoMovimiento;
 
 
+            System.out.println("Indique si es un gasto (S):");
+            if (consola.nextLine().equals("S")){
 
-            registro.addGastos(nuevoGasto);
+                nuevoMovimiento = new Gasto(nombre,
+                        moneda,
+                        categoria,
+                        monto);
 
-            //registro.addGastos(gastoInternet);
-            // System.out.println("Mi gasto de " + gastoLuz.nombre + " es de " + gastoLuz.monto + " " + gastoLuz.moneda); imprime uno por uno
+            }else {
 
-            /*
-            for (int i = 0; i < registro.getGastos().size(); i++) {
-                System.out.println(registro.getGastos().get(i).getNombre());
+                System.out.println("Indique la periodicidad del ingreso:");
+                String periodicidad = consola.nextLine();
 
-            }*/
+                nuevoMovimiento = new Ingreso(nombre,
+                        moneda,
+                        categoria,
+                        monto,
+                        periodicidad);
+            }
 
-            for (Gasto gastico : registro.getGastos()) {
+            registro.addMovimiento(nuevoMovimiento);
+
+
+            System.out.println("Todos los movimientos:");
+            for (Movimiento movimientos : registro.getMovimientos()) {
+                System.out.println(movimientos.getNombre());
+            }
+
+
+            System.out.println("Solo Gastos");
+            for (Movimiento gastico : registro.getGastos()) {
                 System.out.println(gastico.getNombre());
             }
 
