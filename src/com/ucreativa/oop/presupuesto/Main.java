@@ -1,9 +1,8 @@
 package com.ucreativa.oop.presupuesto;
 
-import com.ucreativa.oop.presupuesto.entidades.Gasto;
-import com.ucreativa.oop.presupuesto.entidades.Ingreso;
-import com.ucreativa.oop.presupuesto.entidades.Movimiento;
-import com.ucreativa.oop.presupuesto.entidades.RegistroMovimientos;
+import com.ucreativa.oop.presupuesto.logicaNegocio.ImplementacionRegistro;
+import com.ucreativa.oop.presupuesto.logicaNegocio.ImplementacionSuperDummy;
+import com.ucreativa.oop.presupuesto.logicaNegocio.InterfaceRegistro;
 
 import java.util.Scanner;
 
@@ -15,9 +14,20 @@ public class Main {
         System.out.println("Sistema Registro de Movimientos");
         Scanner consola = new Scanner(System.in);
 
-        RegistroMovimientos registro = new RegistroMovimientos();
-
         boolean siga = true;
+
+        System.out.println("Que quiere usar? Fake? (F)");
+
+        InterfaceRegistro registro ;
+        if (consola.nextLine().equals("F")){
+
+           registro = new ImplementacionSuperDummy();
+
+        }else{
+
+            registro = new ImplementacionRegistro();
+        }
+
         while (siga){
 
             System.out.println("Digite el nombre de su movimiento:");
@@ -31,44 +41,33 @@ public class Main {
 
             System.out.println("Digite el monto de su movimiento:");
             String montoStr = consola.nextLine();
-            int monto = Integer.parseInt(montoStr);
-
-            Movimiento nuevoMovimiento;
 
 
             System.out.println("Indique si es un gasto (S):");
             if (consola.nextLine().equals("S")){
 
-                nuevoMovimiento = new Gasto(nombre,
+                registro.addGasto(nombre,
                         moneda,
                         categoria,
-                        monto);
+                        montoStr);
 
             }else {
 
                 System.out.println("Indique la periodicidad del ingreso:");
                 String periodicidad = consola.nextLine();
 
-                nuevoMovimiento = new Ingreso(nombre,
+                registro.addIngreso(nombre,
                         moneda,
                         categoria,
-                        monto,
+                        montoStr,
                         periodicidad);
             }
 
-            registro.addMovimiento(nuevoMovimiento);
-
-
             System.out.println("Todos los movimientos:");
-            for (Movimiento movimientos : registro.getMovimientos()) {
-                System.out.println(movimientos.getNombre());
-            }
-
+            registro.getMovimientos();
 
             System.out.println("Solo Gastos");
-            for (Movimiento gastico : registro.getGastos()) {
-                System.out.println(gastico.getNombre());
-            }
+            registro.getGastos();
 
             System.out.println("Quiere seguir?('S')");
             siga = consola.nextLine().equals("S"); //validacion para ver si "siga" es true o false
