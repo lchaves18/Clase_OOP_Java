@@ -1,7 +1,7 @@
 package com.ucreativa.oop.presupuesto.logicaNegocio;
 
 
-public class ImplementacionSuperDummy implements InterfaceRegistro{
+public class ImplementacionSuperDummy implements InterfaceRegistro, InterfaceReportes{
 
 
     @Override
@@ -21,6 +21,11 @@ public class ImplementacionSuperDummy implements InterfaceRegistro{
 
     @Override
     public void getGastos() {
+        System.out.println("No haga nada");
+    }
+
+    @Override
+    public void imprimirReporte() {
         System.out.println("No haga nada");
     }
 }
