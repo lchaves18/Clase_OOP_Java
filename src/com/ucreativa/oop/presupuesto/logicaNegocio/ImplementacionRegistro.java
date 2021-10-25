@@ -2,73 +2,57 @@ package com.ucreativa.oop.presupuesto.logicaNegocio;
 
 import com.ucreativa.oop.presupuesto.entidades.Gasto;
 import com.ucreativa.oop.presupuesto.entidades.Ingreso;
-import com.ucreativa.oop.presupuesto.entidades.Movimiento;
+import com.ucreativa.oop.presupuesto.repo.InterfaceRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.stream.Collectors;
 
-public class ImplementacionRegistro implements InterfaceRegistro, InterfaceReportes {
+public class ImplementacionRegistro implements InterfaceRegistro {
 
-    List <Movimiento> movimientos ;
+    private InterfaceRepository repository;
 
-    //constructor
-    public ImplementacionRegistro(){
-        this.movimientos = new ArrayList<>();
+    public ImplementacionRegistro(InterfaceRepository repository){
+
+        this.repository = repository;
 
     }
-
-    public void getMovimientos(){
-
-        for (Movimiento movimientos : movimientos) {
-            System.out.println(movimientos.getDetails());
-        }
-    }
-
     @Override
     public boolean addIngreso(String nombre, String moneda, String categoria, String montoStr, String periodicidad) {
 
-        if(!moneda.equals("USD")){
+        int monto;
+        try{
+            monto = Integer.parseInt(montoStr);
+        }catch (NumberFormatException ex){
 
-            System.out.println("Moneda no valida");
-
-        }else{
-
-            int monto = Integer.parseInt(montoStr);
-            this.movimientos.add(new Ingreso(nombre,
-                    moneda,
-                    categoria,
-                    monto,
-                    periodicidad));
+            System.out.println("Formato invalido en ("+montoStr+"):" + ex.getMessage());
+            return false;
         }
-        return true;
+        Ingreso ingreso = new Ingreso(nombre,
+                moneda,
+                categoria,
+                monto,
+                periodicidad);
+        return this.repository.save(ingreso.getDetails());
     }
 
     @Override
     public boolean addGasto(String nombre, String moneda, String categoria, String montoStr) {
 
         int monto = Integer.parseInt(montoStr);
-        this.movimientos.add(new Gasto(nombre,
+        Gasto gasto = new Gasto(nombre,
                 moneda,
                 categoria,
-                monto));
-        return true;
-    }
+                monto);
 
-    //metodo para traerme solo los gastos
-    public void getGastos(){
-
-        for (Movimiento movimiento : this.movimientos){
-            if (movimiento instanceof Gasto){
-                System.out.println(movimiento.getDetails());
-            }
-        }
+        return this.repository.save(gasto.getDetails());
     }
 
     @Override
-    public void imprimirReporte() {
-        for (Movimiento movimiento : this.movimientos){
-                System.out.println(movimiento.getDetails());
-
-        }
+    public void getMovimientos() {
+        this.repository.read();
+    }
+    @Override
+    public void getGastos() {
+        this.repository.read();
     }
 }

@@ -5,25 +5,23 @@ import java.util.stream.Collectors;
 
 public class FileRepository implements InterfaceRepository {
 
-
     private final String FILE_PATH = "db.txt";
 
     @Override
     public boolean save(String text) {
-        try {
-            FileWriter fileWriter = new FileWriter(this.FILE_PATH, true);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
+
+        try (FileWriter fileWriter = new FileWriter(this.FILE_PATH, true);
+             BufferedWriter writer = new BufferedWriter(fileWriter)) {
 
             writer.append(text + "\n");
             writer.close();
             return true;
 
-        }catch (IOException e){
+        }catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
-
     @Override
     public void read() {
 

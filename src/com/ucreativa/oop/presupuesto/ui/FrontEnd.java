@@ -1,10 +1,9 @@
 package com.ucreativa.oop.presupuesto.ui;
 
 import com.ucreativa.oop.presupuesto.logicaNegocio.ImplementacionRegistro;
-import com.ucreativa.oop.presupuesto.logicaNegocio.ImplementacionRegistroEnArchivo;
 import com.ucreativa.oop.presupuesto.logicaNegocio.InterfaceRegistro;
 import com.ucreativa.oop.presupuesto.repo.FileRepository;
-import com.ucreativa.oop.presupuesto.repo.InterfaceRepository;
+import com.ucreativa.oop.presupuesto.repo.InMemoryRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,12 +19,11 @@ public class FrontEnd extends JFrame {
         super.setSize(400,300);
         super.setLayout(new GridLayout(8,2));
 
-
     }
     public void build(){
 
 
-        InterfaceRegistro registro = new ImplementacionRegistroEnArchivo(new FileRepository());
+        InterfaceRegistro registro = new ImplementacionRegistro(new InMemoryRepository());
 
 
         //creacion de componentes
